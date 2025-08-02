@@ -6,17 +6,8 @@ class Animal {
   constructor(name) {
     this.name = name;
     this.health = 100;
-    // додаємо в список живих тварин
+    // Додаємо кожну тварину в список живих
     Animal.alive.push(this);
-  }
-
-  // допоміжний метод, який видаляє тварину зі списку живих
-  die() {
-    const index = Animal.alive.indexOf(this);
-
-    if (index !== -1) {
-      Animal.alive.splice(index, 1);
-    }
   }
 }
 
@@ -33,22 +24,20 @@ class Herbivore extends Animal {
 
 class Carnivore extends Animal {
   bite(target) {
-    // Не працює, якщо ціль - інший хижак
-    if (target instanceof Carnivore) {
+    // Перевіряємо, що ціль – травоїдний і він не сховався
+    if (!(target instanceof Herbivore) || target.hidden) {
       return;
     }
 
-    // Не працює, якщо травоїдна тварина сховалась
-    if (target.hidden) {
-      return;
-    }
-
-    // Зменшуємо здоров'я на 50
     target.health -= 50;
 
-    // Якщо здоров'я <= 0, видаляємо із alive
     if (target.health <= 0) {
-      target.die();
+      // Видаляємо зі списку живих
+      const index = Animal.alive.indexOf(target);
+
+      if (index !== -1) {
+        Animal.alive.splice(index, 1);
+      }
     }
   }
 }
